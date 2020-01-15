@@ -1,8 +1,9 @@
 
 ---
-
 title: "Introduction for students new to R and RStudio"
 output: statsr:::statswithr_lab
+editor_options: 
+  chunk_output_type: console
 ---
 
 <div class="instructions">
@@ -10,8 +11,6 @@ output: statsr:::statswithr_lab
 </div>
 
 ## Introduction
-
-This is a test. Again, a test.
 
 Your 100 level StatSci course this semester will march you through a thorough introduction to using R for statistical science and data science purposes, as well as for many other practical applications.  You should already be familiar with the environment you are going to use for your course, whether it is RStudio in the Cloud, a Docker container, or software installed on your own computer. Your instructor should have given you that information and you should be ready to use it.  The materials here are a compilation of advice and instructions from your professors Curry Hilton, Victoria Ellison, Yue Jian, Shawn Santo, Bob Eisinger, and especially Maria Tackett, Mine Cetinkaya-Rundel, and TAs including Becky Tang and Jennifer Wilson, and many helpful resources.  
 
@@ -62,6 +61,10 @@ You should have already installed these packages using commands like
 Next, you need to load the packages in your working environment. We do this with
 the `library` function. Note that you only need to **install** packages once, but
 you need to **load** them each time you relaunch RStudio.
+
+```{r first-code-chunk}
+4+12
+```
 
 ```{r load-packages, message = FALSE}
 library(dplyr)
@@ -207,7 +210,7 @@ We can access the data in
 a single column of a data frame separately using a command like
 
 ```{r view-clarity}
-
+# how to access a single column of data
 diamonds$clarity[1:100]
 ```
 
@@ -242,7 +245,7 @@ R has some powerful functions for making graphics. We can create a simple plot
 of the price of diamonds by their weight measured in carats with the command
 
 ```{r plot-price-vs-carat}
-ggplot(data = diamonds, aes(x = carat, y = price)) +
+ggplot(data = diamonds, aes(x = carat, y = price, color = clarity)) +
   geom_point()
 ```
 
@@ -376,7 +379,9 @@ Now, with your partner, play with mutate and piping and create a plot of interes
 
 ```{r plot-of-something-interesting}
 # type your code for the Exercise here, and Knit
-
+ggplot(data = diamonds, aes(x = carat, y = price, color = color)) + 
+  geom_point() + 
+  facet_wrap( ~ clarity)
 
 
 ```
@@ -407,7 +412,7 @@ with many of them.
 We can use just part of the dataset by filtering.   Here, we are going to filter on a particular value of cut and color and plot price vs carat.
 ```{r try-filtering-diamonds}
 fair_diamonds <- diamonds %>%
-  filter(cut == "Fair" & color =="G")
+  filter(price > 10000)
 ggplot(data = fair_diamonds, aes(x = price, y = carat)) +
   geom_point()
 ```
@@ -418,7 +423,11 @@ Let's get the means of the stone prices.
 
 ```{r try-averaging-diamond-prices}
 diamonds %>%
-  summarise(mean = mean(price), sd = sd(price), median = median(price))
+  group_by(color) %>% 
+  summarise(mean = mean(price), 
+            sd = sd(price), 
+            median = median(price),
+            count = n())
 ```
 
 ## Resources for learning R and working in RStudio
